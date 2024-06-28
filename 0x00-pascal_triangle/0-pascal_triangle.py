@@ -1,40 +1,38 @@
 #!/usr/bin/python3
+'''Module to find Pascal's Triangle integers'''
 
 
 def pascal_triangle(n):
-    """
-    This function generates Pascal's triangle up to a specified (n).
+    '''
+    Function to generate Pascal's Triangle up to the nth row
 
-    Args:
-      n: An integer representing the number of rows in the Pascal's triangle.
+        Parameters:
+            n (int): The number of rows of Pascal's triangle
 
-    Returns:
-      A list of lists of integers representing the Pascal's triangle.
-      Returns an empty list if n <= 0.
-    """
+        Returns:
+            list: A list of lists representing Pascal's Triangle
+    '''
+    triangle = []
+
     if n <= 0:
-        return []
+        return triangle
 
-    triangle = [[1]]  # Start with the first row
-
-    for i in range(1, n):
-        prev_row = triangle[-1]
-        new_row = [1]  # First element of the new row is always 1
-
-        # Generate the interior elements of the row
-        for j in range(1, len(prev_row)):
-            new_row.append(prev_row[j - 1] + prev_row[j])
-
-        new_row.append(1)  # Last element of the new row is always 1
-        triangle.append(new_row)
+    for row_num in range(n):
+        # Start with a row of 1s
+        row = [1] * (row_num + 1)
+        
+        # Compute the values for the interior cells of the row
+        for j in range(1, row_num):
+            row[j] = triangle[row_num - 1][j - 1] + triangle[row_num - 1][j]
+        
+        # Append the row to the triangle
+        triangle.append(row)
 
     return triangle
 
 
-# Test the function with the provided script
+# Example usage
 if __name__ == "__main__":
-    def print_triangle(triangle):
-        for row in triangle:
-            print("[{}]".format(",".join([str(x) for x in row])))
+    n = 5
+    print(pascal_triangle(n))
 
-    print_triangle(pascal_triangle(5))
