@@ -9,23 +9,14 @@ def canUnlockAll(boxes):
     Returns:
     bool: True if all boxes can be opened, else False.
     """
-    if not boxes:
-        return False
-
-    # Number of boxes
     n = len(boxes)
-
-    # Set to keep track of opened boxes
-    opened = set()
-    opened.add(0)
-
-    # List to keep track of keys we have
-    keys = [0]
-
-    while keys:
-        current_key = keys.pop()
-        for key in boxes[current_key]:
-            if key not in opened and key < n:
-                opened.add(key)
-                keys.append(key)
-                return len(opened) == n
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
