@@ -1,25 +1,27 @@
 #!/usr/bin/python3
+"""
+Module to determine if all boxes can be opened using keys found in other boxes.
+"""
 
 
 def canUnlockAll(boxes):
     """
     Determines if all boxes can be opened.
 
-    Parameters:
-    boxes (list of list of int): A list of lists where
-    each sublist represents keys contained in a box.
+    Args:
+        boxes (list of list of int): List of boxes, where each box contains
+                                     keys to other boxes.
 
     Returns:
-    bool: True if all boxes can be opened, else False.
+        bool: True if all boxes can be opened, else False.
     """
-    n = len(boxes)
-    seen_boxes = set([0])
-    unseen_boxes = set(boxes[0]).difference(set([0]))
-    while len(unseen_boxes) > 0:
-        boxIdx = unseen_boxes.pop()
-        if not boxIdx or boxIdx >= n or boxIdx < 0:
-            continue
-        if boxIdx not in seen_boxes:
-            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
-            seen_boxes.add(boxIdx)
-    return n == len(seen_boxes)
+    opened_boxes = set()
+    keys_stack = [0]
+
+    while keys_stack:
+        current_key = keys_stack.pop()
+        if current_key not in opened_boxes:
+            opened_boxes.add(current_key)
+            keys_stack.extend(boxes[current_key])
+
+    return len(opened_boxes) == len(boxes)
