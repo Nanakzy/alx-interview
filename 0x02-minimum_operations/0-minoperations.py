@@ -4,7 +4,7 @@ Module: 0-minoperations
 """
 
 
-def minOperations(n: int) -> int:
+def minOperations(n):
     """
     Calculates the fewest number of operations needed to
     result in exactly n H characters.
@@ -19,12 +19,13 @@ def minOperations(n: int) -> int:
     if n <= 1:
         return 0
 
-    operations = [float('inf')] * (n + 1)
-    operations[1] = 0
+    operations = 0
+    factor = 2
 
-    for i in range(2, n + 1):
-        for j in range(1, i // 2 + 1):
-            if i % j == 0:
-                operations[i] = min(operations[i], operations[j] + (i // j))
+    while n > 1:
+        while n % factor == 0:
+            operations += factor
+            n //= factor
+        factor += 1
 
-                return operations[n]
+    return operations
