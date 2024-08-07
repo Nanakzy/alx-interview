@@ -7,7 +7,7 @@ const request = require('request');
 const movieId = process.argv[2];
 
 // Construct the URL to fetch the movie details from the Star Wars API
-const url = `https://swapi-api.hbtn.io/api/films/${movieId}/`;
+const url = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
 // Make an HTTP GET request to fetch the movie details
 request(url, (error, response, body) => {
@@ -22,10 +22,12 @@ request(url, (error, response, body) => {
   // Get the list of character URLs from the film details
   const characters = film.characters;
 
-  // Loop through each character URL to fetch and print the character's name
-  characters.forEach(characterUrl => {
+  // Fetch all characters in the correct order and display their names
+  const fetchCharacter = (index) => {
+    if (index >= characters.length) return;
+
     // Make an HTTP GET request to fetch the character details
-    request(characterUrl, (error, response, body) => {
+    request(characters[index], (error, response, body) => {
       // Handle any errors that occur during the request
       if (error) {
         console.error('Error:', error);
@@ -36,6 +38,12 @@ request(url, (error, response, body) => {
       const character = JSON.parse(body);
       // Print the character's name
       console.log(character.name);
+
+      // Fetch the next character
+      fetchCharacter(index + 1);
     });
-  });
+  };
+
+  // Start fetching characters from the first one
+  fetchCharacter(0);
 });
