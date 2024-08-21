@@ -7,6 +7,8 @@ def makeChange(coins, total):
     Args: coins and total """
     if total <= 0:
         return 0
+    check = 0
+    temp = 0
     # Initialize DP array with a value greater than the possible minimum coins
     dp = [float('inf')] * (total + 1)
     dp[0] = 0  # Base case: 0 coins needed for total 0
