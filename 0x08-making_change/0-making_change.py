@@ -1,6 +1,10 @@
 #!/usr/bin/python3
+"""0-making_change"""
+
 
 def makeChange(coins, total):
+    """ Generate changes needed to reach total
+    Args: coins and total """
     if total <= 0:
         return 0
     # Initialize DP array with a value greater than the possible minimum coins
