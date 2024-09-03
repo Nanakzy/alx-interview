@@ -23,33 +23,38 @@ def remove_prime_and_multiples(nums, prime):
     nums[:] = [n for n in nums if n % prime != 0]
 
 
-def isWinner(x, nums):
-    """Determines the winner of the Prime Game."""
-    maria_wins, ben_wins = 0, 0
+def play_round(n):
+    """Plays one round of the game."""
+    nums = list(range(1, n + 1))
+    maria_turn = True
 
-    for round in range(x):
-        current_nums = list(range(1, max(nums) + 1))  # Reset nums each round
-        maria_turn = True
-
-        while True:
-            prime_found = False
-            for n in current_nums:
-                if is_prime(n):
-                    remove_prime_and_multiples(current_nums, n)
-                    prime_found = True
-                    break
-
-            if not prime_found:
-                if maria_turn:
-                    ben_wins += 1
-                else:
-                    maria_wins += 1
+    while True:
+        prime_found = False
+        for num in nums:
+            if is_prime(num):
+                remove_prime_and_multiples(nums, num)
+                prime_found = True
                 break
 
-            maria_turn = not maria_turn
+        if not prime_found:
+            return not maria_turn
+
+        maria_turn = not maria_turn
+
+
+def isWinner(x, nums):
+    """Determines the overall winner of the Prime Game."""
+    maria_wins, ben_wins = 0, 0
+
+    for n in nums:
+        if play_round(n):
+            maria_wins += 1
+        else:
+            ben_wins += 1
 
     if maria_wins > ben_wins:
         return "Maria"
     elif ben_wins > maria_wins:
         return "Ben"
-    return None
+    else:
+        return None
