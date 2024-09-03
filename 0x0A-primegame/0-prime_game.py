@@ -1,43 +1,47 @@
 #!/usr/bin/python3
-
-def sieve_of_eratosthenes(max_n):
-    primes = [True] * (max_n + 1)
-    p = 2
-    while p * p <= max_n:
-        if primes[p]:
-            for i in range(p * p, max_n + 1, p):
-                primes[i] = False
-        p += 1
-    primes[0] = primes[1] = False  # 0 and 1 are not prime numbers
-    return primes
+"""prime game"""
 
 
-def calculate_prime_moves(max_n, primes):
-    prime_moves = [0] * (max_n + 1)
-    for i in range(1, max_n + 1):
-        prime_moves[i] = prime_moves[i - 1]
-        if primes[i]:
-            prime_moves[i] += 1
-    return prime_moves
+def is_prime(num):
+    """Checks if a number is prime."""
+    if num <= 1:
+        return False
+    if num <= 3:
+        return True
+    if num % 2 == 0 or num % 3 == 0:
+        return False
+    i = 5
+    while i * i <= num:
+        if num % i == 0 or num % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+
+def find_and_remove_prime(nums):
+    """Finds a prime in nums and removes it with its multiples."""
+    for i in range(2, len(nums)):
+        if is_prime(nums[i]):
+            prime = nums[i]
+            nums[i] = 0  # Mark as removed
+            for j in range(i + prime, len(nums), prime):
+                nums[j] = 0  # Remove multiples
+            return prime
+    return None
 
 
 def isWinner(x, nums):
-    if x <= 0 or not nums:
-        return None
-
-    max_n = max(nums)
-    primes = sieve_of_eratosthenes(max_n)
-    prime_moves = calculate_prime_moves(max_n, primes)
-
-    maria_wins = 0
-    ben_wins = 0
-
-    for n in nums:
-        if prime_moves[n] % 2 == 1:
+    """Determines the winner of the Prime Game."""
+    maria_wins, ben_wins = 0, 0
+    for _ in range(x):
+        if not nums:
+            ben_wins += 1
+            continue
+        prime = find_and_remove_prime(nums)
+        if prime:
             maria_wins += 1
         else:
             ben_wins += 1
-
     if maria_wins > ben_wins:
         return "Maria"
     elif ben_wins > maria_wins:
