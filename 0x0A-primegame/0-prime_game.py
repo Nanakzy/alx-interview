@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""prime game"""
+"""Prime game"""
 
 
 def is_prime(num):
@@ -18,33 +18,38 @@ def is_prime(num):
     return True
 
 
-def find_and_remove_prime(nums):
-    """Finds a prime in nums and removes it with its multiples."""
-    for i in range(2, len(nums)):
-        if is_prime(nums[i]):
-            prime = nums[i]
-            nums[i] = 0  # Mark as removed
-            for j in range(i + prime, len(nums), prime):
-                nums[j] = 0  # Remove multiples
-            return prime
-    return None
+def remove_prime_and_multiples(nums, prime):
+    """Removes a prime and its multiples from the list."""
+    nums[:] = [n for n in nums if n % prime != 0]
 
 
 def isWinner(x, nums):
     """Determines the winner of the Prime Game."""
     maria_wins, ben_wins = 0, 0
-    for _ in range(x):
-        if not nums:
-            ben_wins += 1
-            continue
-        prime = find_and_remove_prime(nums)
-        if prime:
-            maria_wins += 1
-        else:
-            ben_wins += 1
+
+    for round in range(x):
+        current_nums = list(range(1, max(nums) + 1))  # Reset nums each round
+        maria_turn = True
+
+        while True:
+            prime_found = False
+            for n in current_nums:
+                if is_prime(n):
+                    remove_prime_and_multiples(current_nums, n)
+                    prime_found = True
+                    break
+
+            if not prime_found:
+                if maria_turn:
+                    ben_wins += 1
+                else:
+                    maria_wins += 1
+                break
+
+            maria_turn = not maria_turn
+
     if maria_wins > ben_wins:
         return "Maria"
     elif ben_wins > maria_wins:
         return "Ben"
-    else:
-        return None
+    return None
