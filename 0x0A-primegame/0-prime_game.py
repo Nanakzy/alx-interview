@@ -7,9 +7,9 @@ from a list of numbers. The winner is determined by the player who forces
 the other player to have no valid moves.
 """
 
+
 def is_prime(num):
     """Checks if a number is prime.
-
     Args:
         num (int): The number to check.
 
