@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Prime game"""
 
+
 def is_prime(num):
     """Checks if a number is prime."""
     if num <= 1:
@@ -16,9 +17,11 @@ def is_prime(num):
         i += 6
     return True
 
+
 def remove_prime_and_multiples(nums, prime):
     """Removes a prime and its multiples from the list."""
     nums[:] = [n for n in nums if n % prime != 0]
+
 
 def play_round(n):
     """Plays one round of the game."""
@@ -37,6 +40,7 @@ def play_round(n):
             return not maria_turn
 
         maria_turn = not maria_turn
+
 
 def isWinner(x, nums):
     """Determines the overall winner of the Prime Game."""
